@@ -5,7 +5,7 @@ const HomePage: React.FC = () => {
   return (
     <div>
       <h1>Quill.js Editor in Next.js</h1>
-      <QuillEditor />
+      <QuillEditor readonly:false />
     </div>
   );
 };

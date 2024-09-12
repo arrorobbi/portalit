@@ -5,16 +5,18 @@ import 'quill/dist/quill.snow.css';
 
 interface QuillEditorProps {
   value?: string;
+  readonly: boolean;
   onChange?: (content: string) => void;
 }
 
-const QuillEditor: React.FC<QuillEditorProps> = ({ value = '', onChange }) => {
+const QuillEditor: React.FC<QuillEditorProps> = ({ value = '', onChange, readonly }) => {
   const editorRef = useRef<HTMLDivElement>(null);
   const quillRef = useRef<Quill | null>(null);
 
   useEffect(() => {
     if (editorRef.current && !quillRef.current) {
       const quill = new Quill(editorRef.current, {
+        readOnly: readonly,
         theme: 'snow',
         modules: {
           toolbar: {
