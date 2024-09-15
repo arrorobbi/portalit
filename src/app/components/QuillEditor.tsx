@@ -7,12 +7,14 @@ interface QuillEditorProps {
   value?: string;
   readonly?: boolean;
   onChange?: (content: string) => void;
+  placeholder?: string;
 }
 
 const QuillEditor: React.FC<QuillEditorProps> = ({
   value = "",
   onChange,
   readonly,
+  placeholder,
 }) => {
   const editorRef = useRef<HTMLDivElement>(null);
   const quillRef = useRef<Quill | null>(null);
@@ -26,6 +28,7 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
     ) {
       const quill = new Quill(editorRef.current, {
         readOnly: readonly,
+        placeholder: placeholder ?? "Write something here...", // Set the placeholder text
         theme: "snow",
         modules: {
           toolbar: {
