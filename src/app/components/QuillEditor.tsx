@@ -32,6 +32,7 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
             container: [
               [{ header: "1" }, { header: "2" }, { font: [] }],
               [{ list: "ordered" }, { list: "bullet" }],
+              [{ size: ["small", "medium", "large", "huge"] }],
               ["bold", "italic", "underline"],
               ["image"],
               ["clean"],
@@ -59,7 +60,7 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
                     );
 
                     const data = await res.json();
-                    const imageUrl = `/uploads/${data.fileName}`;
+                    const imageUrl = `http://localhost:4021${data.path}`;
 
                     // Get the current cursor position (range) in the editor
                     const range = quill.getSelection();
@@ -73,7 +74,7 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
                       `img[src="${imageUrl}"]`
                     ) as HTMLImageElement;
                     if (insertedImage) {
-                      insertedImage.style.maxWidth = "100%";
+                      insertedImage.style.maxWidth = "80%";
                       insertedImage.style.height = "auto";
                       insertedImage.style.cursor = "pointer";
                       insertedImage.style.resize = "both";

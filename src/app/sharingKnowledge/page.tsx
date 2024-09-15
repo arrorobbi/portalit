@@ -1,32 +1,23 @@
 "use client";
 import React from "react";
-import QuillEditor from "../components/QuillEditor"; // Adjust the import path as necessary
+import dynamic from "next/dynamic";
+import Topbar from "../components/TopBar";
+import { Input } from "@/components/ui/input";
 
-interface EnhancedQuillEditorProps {
-  value?: string;
-  readonly?: boolean;
-  onChange?: (content: string) => void;
-  // Add additional props if needed
-}
+const DynamicCom = dynamic(() => import("../components/EnhancedQuillEditor"), {
+  ssr: false,
+});
 
-const EnhancedQuillEditor: React.FC<EnhancedQuillEditorProps> = ({
-  value,
-  onChange,
-  readonly = false,
-}) => {
+const SharingKnowledgePage: React.FC = () => {
   return (
-    <div
-      style={{
-        border: "1px solid #ccc",
-        borderRadius: "4px",
-        padding: "10px",
-        margin: "20px",
-      }}
-    >
-      <h2>Custom Quill Editor</h2>
-      <QuillEditor value={value} onChange={onChange} readonly={readonly} />
+    <div>
+      <Topbar />
+      <div className="mt-40">
+        <Input type="text" placeholder="Title" />
+        <DynamicCom />
+      </div>
     </div>
   );
 };
 
-export default EnhancedQuillEditor;
+export default SharingKnowledgePage;
