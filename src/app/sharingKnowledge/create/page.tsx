@@ -47,7 +47,7 @@ export default function CreateSharingKnowledgePage() {
     <div className="p-10">
       <Topbar onAddNew={handleAddNewTab} /> {/* Pass the handler to Topbar */}
       <div className="pt-28">
-        <DynamicCom setTab={dataContent} />
+        <DynamicCom setTab={dataContent} newTab={tabCounter} />
       </div>
     </div>
   );

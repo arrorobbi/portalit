@@ -11,6 +11,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import API from "@/lib/hooks";
 import dynamic from "next/dynamic";
 import { useState, useEffect } from "react";
+// import { ScrollArea } from "@/components/ui/scroll-area";
+// import { Separator } from "@/components/ui/separator";
 
 export interface LtabProps {
   setTab?: string[];
@@ -18,6 +20,7 @@ export interface LtabProps {
   value?: string[];
   readonly?: boolean;
   firstData?: string; // Add firstData to props
+  newTab?: number;
 }
 
 const DynamicCom = dynamic(() => import("./EnhancedQuillEditor"), {
@@ -28,20 +31,36 @@ interface ResponseData {
   id: string;
   title: string;
   content: string;
-  createAt: Date;
+  createdAt: Date;
   updatedAt: Date;
   // other properties if needed
 }
 
 const TextEditor: React.FC<LtabProps> = ({
   setTab,
-  readonly = false,
-  firstData = "SORE", // Set default firstData to "SORE"
+  readonly = false, // Set default firstData to "SORE"
+  firstData = "Authenticator", // Added firstData to props
+  newTab,
 }) => {
-  const defaultTab = setTab && setTab.length > 0 ? setTab[0] : "SORE"; // Fallback to "SORE" if setTab is empty
-
+  //const defaultTab = setTab && setTab.length > 0 ? setTab[0] : "SORE"; // Fallback to "SORE" if setTab is empty
   const [value, setValue] = useState<ResponseData | null>(null);
-  const [activeTab, setActiveTab] = useState<string>(firstData ?? defaultTab); // Prioritize firstData or defaultTab
+  const [activeTab, setActiveTab] = useState<string>(
+    firstData // Use firstData as the initial active tab
+  );
+
+  console.log(newTab);
+
+  const localDate = value?.createdAt ? new Date(value.createdAt) : null;
+  const formattedLocalDate = localDate
+    ? localDate.toLocaleString()
+    : "Unknown date";
+
+  useEffect(() => {
+    // Check if newTab exists, and if it does, update activeTab
+    if (newTab) {
+      setActiveTab(`New Tab ${newTab}`);
+    }
+  }, [newTab]); // Re-run this effect when newTab changes
 
   useEffect(() => {
     if (activeTab) {
@@ -60,28 +79,37 @@ const TextEditor: React.FC<LtabProps> = ({
       console.error("Error loading content:", error);
     }
   };
-
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab} className="flex">
-      <TabsList className="flex flex-col space-y-2 w-32">
+      {/* Vertical TabsList with flex-col */}
+      {/* <ScrollArea className="fixed top-0 h-72 w-48 rounded-md border bg-gray-500"> */}
+      <TabsList className="flex flex-col items-center justify-center h-full p-6 space-y-4 bg-gray-100 rounded-lg pl-10">
         {setTab?.map((tabValue: string, index: number) => (
-          <TabsTrigger key={index} value={tabValue}>
+          <TabsTrigger
+            key={index}
+            value={tabValue}
+            className={`w-full p-2 text-center rounded-lg transition-colors duration-300 ${
+              activeTab === tabValue
+                ? "bg-gray-300 text-black"
+                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+            }`}
+          >
             {tabValue}
           </TabsTrigger>
         ))}
       </TabsList>
-      <div className="ml-4 w-full">
+      {/* </ScrollArea> */}
+
+      <div className="ml-4 w-3/4">
         {setTab?.map((tabValue: string) => (
           <TabsContent key={tabValue} value={tabValue}>
             <Card>
               <CardHeader>
-                <CardTitle>{value?.title || "Create New Contet"}</CardTitle>
+                <CardTitle>{value?.title || "Create New Content"}</CardTitle>
                 <CardDescription>
                   {value
                     ? `Content created at: ${
-                        value.createAt
-                          ? value.createAt.toDateString()
-                          : "Unknown date"
+                        value.createdAt ? formattedLocalDate : "Unknown date"
                       }`
                     : "Loading content..."}
                 </CardDescription>

@@ -1,10 +1,9 @@
-"use client";
 import React, { useState } from "react";
 import QuillEditor from "./QuillEditor"; // Adjust the import path as necessary
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import TextEditor from "./TextEditor";
+import API from "@/lib/hooks";
 
 export interface EnhancedQuillEditorProps {
   value?: string;
@@ -19,7 +18,6 @@ export default function EnhancedQuillEditor({
   value = "",
   readonly = false,
   title = "",
-  setTab,
 }: EnhancedQuillEditorProps) {
   // State to hold the editor content
   const [editorContent, setEditorContent] = useState<string>(value);
@@ -30,14 +28,25 @@ export default function EnhancedQuillEditor({
     setTitle(event.target.value); // Update the state with the input value
   };
 
-  console.log(editorContent);
-  // console.log(contentTitle);
-  // console.log(title);
-
+  const postHandler = async () => {
+    const payload = { title: contentTitle, content: editorContent };
+    const response = await API(
+      "POST",
+      `${process.env.BE_HOST}/content`,
+      payload
+    );
+    if (response.status === 200) {
+      // Success!
+      // Redirect to the newly created content page
+      window.location.href = `/sharingKnowledge/create`;
+    } else {
+      // Handle error
+      console.error("Error creating content:", response.error);
+    }
+  };
   return (
     <div>
       <div className="grid w-full gap-2">
-        <TextEditor setTab={setTab} />
         {!readonly ? (
           <>
             <Label className="pl-4 font-bold italic text-xl">Title</Label>
@@ -54,7 +63,7 @@ export default function EnhancedQuillEditor({
           onChange={setEditorContent}
           readonly={readonly}
         />
-        {!readonly && <Button>Save</Button>}
+        {!readonly && <Button onClick={postHandler}>Save</Button>}
       </div>
     </div>
   );

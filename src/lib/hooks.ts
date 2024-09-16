@@ -1,7 +1,7 @@
 export default async function API(
   method: string,
   endpoint: string,
-  editorContent?: object
+  payload?: object
 ) {
   try {
     const options: RequestInit = {
@@ -12,8 +12,10 @@ export default async function API(
     };
 
     // Only include body if method is POST or PUT
+    console.log(payload);
+
     if (method === "POST" || method === "PUT") {
-      options.body = JSON.stringify({ content: editorContent });
+      options.body = JSON.stringify(payload);
     }
 
     const response = await fetch(endpoint, options);

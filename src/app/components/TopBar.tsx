@@ -52,7 +52,7 @@ export default function Topbar({ onAddNew }: TopbarProps) {
 
           {/* Mobile Menu Button */}
           <div className="md:hidden">
-            <button className="text-gray-600 focus:outline-none">
+            <Button className="text-gray-600 focus:outline-none">
               <svg
                 className="h-6 w-6"
                 fill="none"
@@ -67,7 +67,7 @@ export default function Topbar({ onAddNew }: TopbarProps) {
                   d="M4 6h16M4 12h16M4 18h16"
                 ></path>
               </svg>
-            </button>
+            </Button>
           </div>
         </div>
       </header>
