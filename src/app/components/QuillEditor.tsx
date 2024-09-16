@@ -31,7 +31,7 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
         placeholder: placeholder ?? "Write something here...", // Set the placeholder text
         theme: "snow",
         modules: {
-          toolbar: {
+          toolbar: !readonly && {
             container: [
               [{ header: "1" }, { header: "2" }, { font: [] }],
               [{ list: "ordered" }, { list: "bullet" }],

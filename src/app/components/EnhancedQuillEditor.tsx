@@ -4,12 +4,14 @@ import QuillEditor from "./QuillEditor"; // Adjust the import path as necessary
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import TextEditor from "./TextEditor";
 
 export interface EnhancedQuillEditorProps {
   value?: string;
   readonly?: boolean;
   title?: string;
   onChange?: (content: string) => void;
+  setTab?: string[];
   // Add additional props if needed
 }
 
@@ -17,6 +19,7 @@ export default function EnhancedQuillEditor({
   value = "",
   readonly = false,
   title = "",
+  setTab,
 }: EnhancedQuillEditorProps) {
   // State to hold the editor content
   const [editorContent, setEditorContent] = useState<string>(value);
@@ -34,13 +37,18 @@ export default function EnhancedQuillEditor({
   return (
     <div>
       <div className="grid w-full gap-2">
-        <Label className="pl-4 font-bold italic text-xl">Title</Label>
-        <Input
-          placeholder="Input Title"
-          onChange={handleTitleChange}
-          type="text"
-          value={contentTitle}
-        />
+        <TextEditor setTab={setTab} />
+        {!readonly ? (
+          <>
+            <Label className="pl-4 font-bold italic text-xl">Title</Label>
+            <Input
+              placeholder="Input Title"
+              onChange={handleTitleChange}
+              type="text"
+              value={contentTitle}
+            />
+          </>
+        ) : null}
         <QuillEditor
           value={value}
           onChange={setEditorContent}
