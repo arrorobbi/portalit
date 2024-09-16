@@ -14,38 +14,26 @@ interface ContentItem {
   id: string;
   title: string;
   content: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: string; // Ensure this matches API response format
+  updatedAt: string; // Ensure this matches API response format
 }
 
-interface SharingKnowledgePageProps {
-  value?: string[];
-}
-
-export default function SharingKnowledgePage({
-  value = [],
-}: SharingKnowledgePageProps) {
-  const [dataContent, setDatacontent] = useState<string[]>(value);
+export default function CreateSharingKnowledgePage() {
+  const [dataContent, setDatacontent] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const content = await API("GET", `${process.env.BE_HOST}/content`);
-        const data = content.data.payload;
+        const response = await API("GET", `${process.env.BE_HOST}/content`);
+        const data = response.data.payload;
         const titles: string[] = data.map((item: ContentItem) => item.title);
-        return titles;
+        setDatacontent(titles);
       } catch (error) {
         console.error("Error fetching content:", error);
-        return [];
       }
     };
 
-    const loadData = async () => {
-      const res: string[] = await fetchData();
-      setDatacontent(res);
-    };
-
-    loadData();
+    fetchData();
   }, []);
 
   return (

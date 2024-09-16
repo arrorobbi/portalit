@@ -28,7 +28,7 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
     ) {
       const quill = new Quill(editorRef.current, {
         readOnly: readonly,
-        placeholder: placeholder ?? "Write something here...", // Set the placeholder text
+        placeholder: readonly ? "" : placeholder ?? "Write something here...", // Set placeholder text conditionally
         theme: "snow",
         modules: {
           toolbar: !readonly && {

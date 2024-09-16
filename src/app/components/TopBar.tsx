@@ -1,13 +1,22 @@
 "use client";
 
+import Image from "next/image";
+import logoSrc from "/public/logo.svg"; // Adjust the path if necessary
+
 export default function Topbar() {
   return (
-    <div className="bg-white fixed w-full h-15 flex justify-between  items-center gap-8 shadow-navbar pr-12 py-2 z-10">
+    <div className="bg-white fixed w-full h-15 flex justify-between items-center gap-8 shadow-navbar pr-12 py-2 z-10">
       <header className="w-full h-10% text-white shadow-md fixed top-0 left-0 z-10 p-4 bg-[#FFFFFF]">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           {/* Logo */}
           <div className="colums-md">
-            <img src="/logo.svg" className="w-40 h-auto" />
+            <Image
+              src={logoSrc}
+              alt="Logo"
+              className="w-40 h-auto" // Tailwind CSS classes for styling
+              width={160} // Adjust the width as needed
+              height={40} // Adjust the height to maintain aspect ratio
+            />
           </div>
 
           {/* Navigation Links */}
