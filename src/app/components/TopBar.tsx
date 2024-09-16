@@ -1,9 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import logoSrc from "/public/logo.svg"; // Adjust the path if necessary
+import logoSrc from "/public/logo.svg";
+import { Button } from "@/components/ui/button";
 
-export default function Topbar() {
+interface TopbarProps {
+  onAddNew?: () => void; // Make onAddNew optional
+}
+
+export default function Topbar({ onAddNew }: TopbarProps) {
   return (
     <div className="bg-white fixed w-full h-15 flex justify-between items-center gap-8 shadow-navbar pr-12 py-2 z-10">
       <header className="w-full h-10% text-white shadow-md fixed top-0 left-0 z-10 p-4 bg-[#FFFFFF]">
@@ -13,9 +18,9 @@ export default function Topbar() {
             <Image
               src={logoSrc}
               alt="Logo"
-              className="w-40 h-auto" // Tailwind CSS classes for styling
-              width={160} // Adjust the width as needed
-              height={40} // Adjust the height to maintain aspect ratio
+              className="w-40 h-auto"
+              width={160}
+              height={40}
             />
           </div>
 
@@ -35,15 +40,15 @@ export default function Topbar() {
             </a>
           </nav>
 
-          {/* Button */}
-          {/* <div className="hidden md:block">
-            <a
-              href="#login"
-              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+          {/* Render Add New button if onAddNew is provided */}
+          {onAddNew && (
+            <Button
+              className="bg-blue-600 text-white rounded-md hover:bg-blue-700"
+              onClick={onAddNew}
             >
-              Login
-            </a>
-          </div> */}
+              Add New
+            </Button>
+          )}
 
           {/* Mobile Menu Button */}
           <div className="md:hidden">

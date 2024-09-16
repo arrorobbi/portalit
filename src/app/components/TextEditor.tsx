@@ -10,14 +10,14 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import API from "@/lib/hooks";
 import dynamic from "next/dynamic";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export interface LtabProps {
   setTab?: string[];
   setContent?: string[];
   value?: string[];
   readonly?: boolean;
-  // Add additional props if needed
+  firstData?: string; // Add firstData to props
 }
 
 const DynamicCom = dynamic(() => import("./EnhancedQuillEditor"), {
@@ -33,56 +33,66 @@ interface ResponseData {
   // other properties if needed
 }
 
-const TextEditor: React.FC<LtabProps> = ({ setTab, readonly = false }) => {
+const TextEditor: React.FC<LtabProps> = ({
+  setTab,
+  readonly = false,
+  firstData = "SORE", // Set default firstData to "SORE"
+}) => {
+  const defaultTab = setTab && setTab.length > 0 ? setTab[0] : "SORE"; // Fallback to "SORE" if setTab is empty
+
   const [value, setValue] = useState<ResponseData | null>(null);
+  const [activeTab, setActiveTab] = useState<string>(firstData ?? defaultTab); // Prioritize firstData or defaultTab
+
+  useEffect(() => {
+    if (activeTab) {
+      loadContent(activeTab); // Load content based on the active tab
+    }
+  }, [activeTab]);
 
   const loadContent = async (title: string) => {
-    const response: ResponseData = await API(
-      "GET",
-      `${process.env.BE_HOST}/content/${title}`
-    );
-    setValue(response);
+    try {
+      const response: ResponseData = await API(
+        "GET",
+        `${process.env.BE_HOST}/content/${title}`
+      );
+      setValue(response);
+    } catch (error) {
+      console.error("Error loading content:", error);
+    }
   };
 
-  console.log(value?.title);
-
   return (
-    <Tabs defaultValue={setTab ? setTab[0] : undefined} className="flex">
-      {/* TabsList should be outside the map */}
+    <Tabs value={activeTab} onValueChange={setActiveTab} className="flex">
       <TabsList className="flex flex-col space-y-2 w-32">
         {setTab?.map((tabValue: string, index: number) => (
-          <TabsTrigger
-            onClick={() => loadContent(tabValue)}
-            key={index}
-            value={tabValue}
-          >
+          <TabsTrigger key={index} value={tabValue}>
             {tabValue}
           </TabsTrigger>
         ))}
       </TabsList>
-
-      {/* Main content area */}
       <div className="ml-4 w-full">
-        <TabsContent value={value?.title ?? ""}>
-          <Card>
-            <CardHeader>
-              <CardTitle>{value?.title || "Default Title"}</CardTitle>
-              <CardDescription>
-                {value
-                  ? `Content created at: ${
-                      value.createAt
-                        ? value.createAt.toDateString()
-                        : "Unknown date"
-                    }`
-                  : "Loading content..."}
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              <DynamicCom value={value?.content || ""} readonly={readonly} />
-            </CardContent>
-            <CardFooter></CardFooter>
-          </Card>
-        </TabsContent>
+        {setTab?.map((tabValue: string) => (
+          <TabsContent key={tabValue} value={tabValue}>
+            <Card>
+              <CardHeader>
+                <CardTitle>{value?.title || "Create New Contet"}</CardTitle>
+                <CardDescription>
+                  {value
+                    ? `Content created at: ${
+                        value.createAt
+                          ? value.createAt.toDateString()
+                          : "Unknown date"
+                      }`
+                    : "Loading content..."}
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <DynamicCom value={value?.content || ""} readonly={readonly} />
+              </CardContent>
+              <CardFooter></CardFooter>
+            </Card>
+          </TabsContent>
+        ))}
       </div>
     </Tabs>
   );
