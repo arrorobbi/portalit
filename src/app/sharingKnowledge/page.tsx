@@ -18,15 +18,15 @@ interface ContentItem {
 }
 
 export default function SharingKnowledgePage() {
-  const [dataContent, setDatacontent] = useState<string[]>([]);
+  const [dataContent, setDatacontent] = useState<{ id: string; title: string }[]>([]);
 
-  useEffect(() => {
+  useEffect(() => { //data is push in props texteditor
     const fetchData = async () => {
       try {
         const response = await API("GET", `${process.env.BE_HOST}/content`);
         const data = response.data.payload;
-        const titles: string[] = data.map((item: ContentItem) => item.title);
-        setDatacontent(titles); // Update the state with the resolved data
+        // const titles: string[] = data.map((item: ContentItem) => item.title);
+        setDatacontent(data); // Update the state with the resolved data
       } catch (error) {
         console.error("Error fetching content:", error);
         setDatacontent([]);
@@ -35,6 +35,8 @@ export default function SharingKnowledgePage() {
 
     fetchData(); // Call the async function directly
   }, []);
+  console.log(dataContent);
+  
 
   return (
     <div className="p-10">

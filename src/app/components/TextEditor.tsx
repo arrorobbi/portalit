@@ -15,14 +15,13 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 // import { Separator } from "@/components/ui/separator";
 
 export interface LtabProps {
-  setTab?: string[];
+  setTab?: { id: string; title: string }[]; // Adjusted type definition
   setContent?: string[];
   value?: string[];
   readonly?: boolean;
-  firstData?: string; // Add firstData to props
+  firstData?: string;
   newTab?: number;
 }
-
 const DynamicCom = dynamic(() => import("./EnhancedQuillEditor"), {
   ssr: false,
 });
@@ -48,7 +47,7 @@ const TextEditor: React.FC<LtabProps> = ({
     firstData // Use firstData as the initial active tab
   );
 
-  console.log(newTab);
+  console.log(setTab); // get key from components for req content/:id
 
   const localDate = value?.createdAt ? new Date(value.createdAt) : null;
   const formattedLocalDate = localDate
@@ -59,6 +58,7 @@ const TextEditor: React.FC<LtabProps> = ({
     // Check if newTab exists, and if it does, update activeTab
     if (newTab) {
       setActiveTab(`New Tab ${newTab}`);
+      setValue(null);
     }
   }, [newTab]); // Re-run this effect when newTab changes
 
@@ -79,6 +79,8 @@ const TextEditor: React.FC<LtabProps> = ({
       console.error("Error loading content:", error);
     }
   };
+
+  setTab?.map((value, index) => console.log(value));
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab} className="flex">
       <ScrollArea className="sticky top-0 h-72 w-48 rounded-md border overflow-y-auto">
