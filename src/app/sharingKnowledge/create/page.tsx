@@ -1,4 +1,5 @@
 "use client";
+
 import dynamic from "next/dynamic";
 import Topbar from "../../components/TopBar";
 import { useEffect, useState } from "react";
@@ -18,16 +19,22 @@ interface ContentItem {
 }
 
 export default function CreateSharingKnowledgePage() {
-  const [dataContent, setDatacontent] = useState<string[]>([]);
+  const [dataContent, setDatacontent] = useState<{ id: string; title: string }[]>([]);
   const [tabCounter, setTabCounter] = useState<number>(0); // Add a counter to generate new tab titles
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await API("GET", `${process.env.BE_HOST}/content`);
-        const data = response.data.payload;
-        const titles: string[] = data.map((item: ContentItem) => item.title);
-        setDatacontent(titles); // Set the initial tabs
+        const data: ContentItem[] = response.data.payload;
+
+        // Format data to match the expected type
+        const formattedData = data.map(item => ({
+          id: item.id,
+          title: item.title,
+        }));
+        
+        setDatacontent(formattedData); // Update the state with the formatted data
       } catch (error) {
         console.error("Error fetching content:", error);
       }
@@ -37,9 +44,13 @@ export default function CreateSharingKnowledgePage() {
   }, []);
 
   // Function to handle adding a new tab
-  const handleAddNewTab = () => {
-    const newTabTitle = `New Tab ${tabCounter + 1}`;
-    setDatacontent((prevTabs) => [...prevTabs, newTabTitle]);
+  const handleAddNewTab = () => { //check this request for new tab
+    const newTab = {
+      id: `new-tab-${tabCounter + 1}`, // Unique ID for the new tab
+      title: `New Tab ${tabCounter + 1}`,
+    };
+    
+    setDatacontent((prevTabs) => [...prevTabs, newTab]);
     setTabCounter((prevCounter) => prevCounter + 1);
   };
 

@@ -15,14 +15,13 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 // import { Separator } from "@/components/ui/separator";
 
 export interface LtabProps {
-  setTab?: string[];
+  setTab?: { id: string; title: string }[]; // Adjusted type definition
   setContent?: string[];
   value?: string[];
   readonly?: boolean;
-  firstData?: string; // Add firstData to props
+  firstData?: string;
   newTab?: number;
 }
-
 const DynamicCom = dynamic(() => import("./EnhancedQuillEditor"), {
   ssr: false,
 });
@@ -48,7 +47,7 @@ const TextEditor: React.FC<LtabProps> = ({
     firstData // Use firstData as the initial active tab
   );
 
-  console.log(newTab);
+  console.log(setTab); // get key from components for req content/:id
 
   const localDate = value?.createdAt ? new Date(value.createdAt) : null;
   const formattedLocalDate = localDate
@@ -59,6 +58,7 @@ const TextEditor: React.FC<LtabProps> = ({
     // Check if newTab exists, and if it does, update activeTab
     if (newTab) {
       setActiveTab(`New Tab ${newTab}`);
+      setValue(null);
     }
   }, [newTab]); // Re-run this effect when newTab changes
 
@@ -79,49 +79,52 @@ const TextEditor: React.FC<LtabProps> = ({
       console.error("Error loading content:", error);
     }
   };
+
+  setTab?.map((value, index) => console.log(value));
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab} className="flex">
-    <ScrollArea className="sticky top-0 h-72 w-48 rounded-md border overflow-y-auto">
-      <TabsList className="flex flex-col items-center justify-center h-full p-6 space-y-4 bg-gray-100 rounded-lg pl-10">
-        {setTab?.map((tabValue: string, index: number) => (
-          <TabsTrigger
-            key={index}
-            value={tabValue}
-            className={`w-full p-2 text-center rounded-lg transition-colors duration-300 ${
-              activeTab === tabValue
-                ? "bg-gray-300 text-black"
-                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-            }`}
-          >
-            {tabValue}
-          </TabsTrigger>
-        ))}
-      </TabsList>
-    </ScrollArea>
+      <ScrollArea className="sticky top-0 h-72 w-48 rounded-md border overflow-y-auto">
+        <TabsList className="flex flex-col items-center justify-center h-full p-6 space-y-4 bg-gray-100 rounded-lg pl-10">
+          {setTab?.map((tabValue: string, index: number) => (
+            <TabsTrigger
+              key={index}
+              value={tabValue}
+              className={`w-full p-2 text-center rounded-lg transition-colors duration-300 ${
+                activeTab === tabValue
+                  ? "bg-gray-300 text-black"
+                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+              }`}
+            >
+              {tabValue}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+      </ScrollArea>
 
-    <div className="ml-4 w-3/4">
-      {setTab?.map((tabValue: string) => (
-        <TabsContent key={tabValue} value={tabValue}>
-          <Card>
-            <CardHeader>
-              <CardTitle>{value?.title || "Create New Content"}</CardTitle>
-              <CardDescription>
-                {value
-                  ? `Content created at: ${
-                      value.createdAt ? formattedLocalDate : "Unknown date"
-                    }`
-                  : "Loading content..."}
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-2">
+      <div className="ml-4 w-3/4">
+        {setTab?.map((tabValue: string) => (
+          <TabsContent key={tabValue} value={tabValue}>
+            <Card>
+              <CardHeader>
+                <CardTitle>{value?.title || "Create New Content"}</CardTitle>
+                <CardDescription>
+                  {value
+                    ? `Content created at: ${
+                        value.createdAt ? formattedLocalDate : "Unknown date"
+                      }`
+                    : "Loading content..."}
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <p>{value?.content} TEXT EDITOR</p>
                 <DynamicCom value={value?.content || ""} readonly={readonly} />
-            </CardContent>
-            <CardFooter></CardFooter>
-          </Card>
-        </TabsContent>
-      ))}
-    </div>
-  </Tabs>
+              </CardContent>
+              <CardFooter></CardFooter>
+            </Card>
+          </TabsContent>
+        ))}
+      </div>
+    </Tabs>
   );
 };
 
