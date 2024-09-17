@@ -20,7 +20,6 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
   const quillRef = useRef<Quill | null>(null);
 
   useEffect(() => {
-    // Ensure this code only runs on the client-side
     if (
       typeof window !== "undefined" &&
       editorRef.current &&
@@ -28,7 +27,7 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
     ) {
       const quill = new Quill(editorRef.current, {
         readOnly: readonly,
-        placeholder: readonly ? "" : placeholder ?? "Write something here...", // Set placeholder text conditionally
+        placeholder: readonly ? "" : placeholder ?? "Write something here...",
         theme: "snow",
         modules: {
           toolbar: !readonly && {
@@ -53,7 +52,6 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
                     const formData = new FormData();
                     formData.append("image", file);
 
-                    // Upload image to the public folder (or handle backend upload here)
                     const res = await fetch(
                       "http://localhost:4021/upload/image",
                       {
@@ -64,15 +62,10 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
 
                     const data = await res.json();
                     const imageUrl = `http://localhost:4021${data.path}`;
-
-                    // Get the current cursor position (range) in the editor
                     const range = quill.getSelection();
-
-                    // If range is null, insert image at the end of the content
                     const position = range ? range.index : quill.getLength();
                     quill.insertEmbed(position, "image", imageUrl);
 
-                    // Apply inline styles to the inserted image for responsiveness and resizing
                     const insertedImage = editorRef.current?.querySelector(
                       `img[src="${imageUrl}"]`
                     ) as HTMLImageElement;
@@ -92,8 +85,6 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
       });
 
       quillRef.current = quill;
-
-      // Set initial content based on 'value' prop
       quill.root.innerHTML = value;
 
       quill.on("text-change", () => {
@@ -103,14 +94,19 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
       });
     }
 
-    // Cleanup on unmount
     return () => {
       if (quillRef.current) {
         quillRef.current.disable();
         quillRef.current = null;
       }
     };
-  }, [value, onChange, readonly]);
+  }, []); // <-- Only initialize Quill once
+
+  useEffect(() => {
+    if (quillRef.current && value !== quillRef.current.root.innerHTML) {
+      quillRef.current.root.innerHTML = value;
+    }
+  }, [value]);
 
   return <div ref={editorRef} />;
 };
