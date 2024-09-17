@@ -70,11 +70,12 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
                       `img[src="${imageUrl}"]`
                     ) as HTMLImageElement;
                     if (insertedImage) {
-                      insertedImage.style.maxWidth = "80%";
-                      insertedImage.style.height = "auto";
+                      // Apply inline styles directly to the image
+                      insertedImage.style.maxWidth = "30%"; // Ensure image is responsive
+                      insertedImage.style.height = "30%";
                       insertedImage.style.cursor = "pointer";
-                      insertedImage.style.resize = "both";
-                      insertedImage.style.overflow = "hidden";
+                      insertedImage.style.resize = "both"; // Enable resizing
+                      insertedImage.style.overflow = "hidden"; // Prevent overflow
                     }
                   }
                 };

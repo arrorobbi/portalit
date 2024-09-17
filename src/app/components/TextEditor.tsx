@@ -81,48 +81,47 @@ const TextEditor: React.FC<LtabProps> = ({
   };
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab} className="flex">
-      {/* Vertical TabsList with flex-col */}
-      <ScrollArea className="sticky top-0 h-72 w-48 rounded-md border bg-gray-500 overflow-y-auto">
-        <TabsList className="flex flex-col items-center justify-center h-full p-6 space-y-4 bg-gray-100 rounded-lg pl-10">
-          {setTab?.map((tabValue: string, index: number) => (
-            <TabsTrigger
-              key={index}
-              value={tabValue}
-              className={`w-full p-2 text-center rounded-lg transition-colors duration-300 ${
-                activeTab === tabValue
-                  ? "bg-gray-300 text-black"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-              }`}
-            >
-              {tabValue}
-            </TabsTrigger>
-          ))}
-        </TabsList>
-      </ScrollArea>
-
-      <div className="ml-4 w-3/4">
-        {setTab?.map((tabValue: string) => (
-          <TabsContent key={tabValue} value={tabValue}>
-            <Card>
-              <CardHeader>
-                <CardTitle>{value?.title || "Create New Content"}</CardTitle>
-                <CardDescription>
-                  {value
-                    ? `Content created at: ${
-                        value.createdAt ? formattedLocalDate : "Unknown date"
-                      }`
-                    : "Loading content..."}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                <DynamicCom value={value?.content || ""} readonly={readonly} />
-              </CardContent>
-              <CardFooter></CardFooter>
-            </Card>
-          </TabsContent>
+    <ScrollArea className="sticky top-0 h-72 w-48 rounded-md border overflow-y-auto">
+      <TabsList className="flex flex-col items-center justify-center h-full p-6 space-y-4 bg-gray-100 rounded-lg pl-10">
+        {setTab?.map((tabValue: string, index: number) => (
+          <TabsTrigger
+            key={index}
+            value={tabValue}
+            className={`w-full p-2 text-center rounded-lg transition-colors duration-300 ${
+              activeTab === tabValue
+                ? "bg-gray-300 text-black"
+                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+            }`}
+          >
+            {tabValue}
+          </TabsTrigger>
         ))}
-      </div>
-    </Tabs>
+      </TabsList>
+    </ScrollArea>
+
+    <div className="ml-4 w-3/4">
+      {setTab?.map((tabValue: string) => (
+        <TabsContent key={tabValue} value={tabValue}>
+          <Card>
+            <CardHeader>
+              <CardTitle>{value?.title || "Create New Content"}</CardTitle>
+              <CardDescription>
+                {value
+                  ? `Content created at: ${
+                      value.createdAt ? formattedLocalDate : "Unknown date"
+                    }`
+                  : "Loading content..."}
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-2">
+                <DynamicCom value={value?.content || ""} readonly={readonly} />
+            </CardContent>
+            <CardFooter></CardFooter>
+          </Card>
+        </TabsContent>
+      ))}
+    </div>
+  </Tabs>
   );
 };
 
