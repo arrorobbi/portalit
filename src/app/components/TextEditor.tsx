@@ -80,7 +80,7 @@ const TextEditor: React.FC<LtabProps> = ({
     }
   };
 
-  setTab?.map((value, index) => console.log(value));
+  setTab?.map((value) => console.log(value));
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab} className="flex">
       <ScrollArea className="sticky top-0 h-72 w-48 rounded-md border overflow-y-auto">

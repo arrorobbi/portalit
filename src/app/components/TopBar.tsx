@@ -16,26 +16,39 @@ export default function Topbar({ onAddNew }: TopbarProps) {
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           {/* Logo */}
           <div className="colums-md">
-          <Link href="http://10.100.101.124:3000/clipan/public/#header" passHref>
-          <Image
-            src={logoSrc}
-            alt="Logo"
-            className="w-40 h-auto"
-            width={160}
-            height={40}
-          />
-        </Link>
+            <Link
+              href="http://10.100.101.124:3000/clipan/public/#header"
+              passHref
+            >
+              <Image
+                src={logoSrc}
+                alt="Logo"
+                className="w-40 h-auto"
+                width={160}
+                height={40}
+                priority
+              />
+            </Link>
           </div>
 
           {/* Navigation Links */}
           <nav className="space-x-8 hidden md:flex">
-            <a href="http://10.100.101.124:3000/clipan/public/#header" className="text-gray-600 hover:text-blue-600">
+            <a
+              href="http://10.100.101.124:3000/clipan/public/#header"
+              className="text-gray-600 hover:text-blue-600"
+            >
               Home
             </a>
-            <a href="http://10.100.101.124:3000/clipan/public/#links" className="text-gray-600 hover:text-blue-600">
+            <a
+              href="http://10.100.101.124:3000/clipan/public/#links"
+              className="text-gray-600 hover:text-blue-600"
+            >
               Web Links
             </a>
-            <a href="http://10.100.101.124:3000/clipan/public/#contacts" className="text-gray-600 hover:text-blue-600">
+            <a
+              href="http://10.100.101.124:3000/clipan/public/#contacts"
+              className="text-gray-600 hover:text-blue-600"
+            >
               Contact
             </a>
           </nav>
