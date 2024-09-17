@@ -15,7 +15,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 // import { Separator } from "@/components/ui/separator";
 
 export interface LtabProps {
-  setTab?: { id: string; title: string }[]; // Adjusted type definition
+  setTab?: string[]; // Adjusted type definition
   setContent?: string[];
   value?: string[];
   readonly?: boolean;
@@ -116,7 +116,6 @@ const TextEditor: React.FC<LtabProps> = ({
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-2">
-                <p>{value?.content} TEXT EDITOR</p>
                 <DynamicCom value={value?.content || ""} readonly={readonly} />
               </CardContent>
               <CardFooter></CardFooter>
