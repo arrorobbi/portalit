@@ -53,7 +53,7 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
                     formData.append("image", file);
 
                     const res = await fetch(
-                      "http://localhost:4021/upload/image",
+                      `${process.env.BE_HOST}/upload/image`,
                       {
                         method: "POST",
                         body: formData,
