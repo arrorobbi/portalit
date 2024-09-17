@@ -61,20 +61,20 @@ export default function EnhancedQuillEditor({
         ) : null}
         {!readonly ? (
           <QuillEditor
-          value={editorContent}
-          onChange={setEditorContent}
-          readonly={readonly}
-        />
-        ): (
+            value={value}
+            onChange={setEditorContent}
+            readonly={readonly}
+          />
+        ) : (
           <ScrollArea className="h-80 overflow-auto">
-      <QuillEditor
-        value={value}
-        onChange={setEditorContent}
-        readonly={readonly}
-      />
-    </ScrollArea>
+            <QuillEditor
+              value={value}
+              onChange={setEditorContent}
+              readonly={readonly}
+            />
+          </ScrollArea>
         )}
-        
+
         {!readonly && <Button onClick={postHandler}>Save</Button>}
       </div>
     </div>
