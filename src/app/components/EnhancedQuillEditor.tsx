@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import API from "@/lib/hooks";
+import { ScrollArea } from "@radix-ui/react-scroll-area";
 
 export interface EnhancedQuillEditorProps {
   value?: string;
@@ -58,11 +59,13 @@ export default function EnhancedQuillEditor({
             />
           </>
         ) : null}
+       <ScrollArea className={readonly ? "h-80 overflow-auto" : ""}>
         <QuillEditor
-          value={value}
+          value={editorContent}
           onChange={setEditorContent}
           readonly={readonly}
         />
+        </ScrollArea>
         {!readonly && <Button onClick={postHandler}>Save</Button>}
       </div>
     </div>
