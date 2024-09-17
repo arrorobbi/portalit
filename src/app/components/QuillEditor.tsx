@@ -61,7 +61,7 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
                     );
 
                     const data = await res.json();
-                    const imageUrl = `http://localhost:4021${data.path}`;
+                    const imageUrl = `${process.env.BE_HOST}${data.path}`;
                     const range = quill.getSelection();
                     const position = range ? range.index : quill.getLength();
                     quill.insertEmbed(position, "image", imageUrl);
