@@ -27,8 +27,6 @@ export default function SharingKnowledgePage() {
         const response = await API("GET", `${process.env.BE_HOST}/content`);
         const data = response.data.payload;
         const titles: string[] = data.map((item: ContentItem) => item.title);
-        console.log(titles);
-
         setDatacontent(titles); // Update the state with the resolved data
       } catch (error) {
         console.error("Error fetching content:", error);
@@ -38,13 +36,12 @@ export default function SharingKnowledgePage() {
 
     fetchData(); // Call the async function directly
   }, []);
-  console.log(dataContent);
 
   return (
     <div className="p-10">
       <Topbar />
       <div className="pt-28">
-        <DynamicCom setTab={dataContent} readonly={true} />
+        <DynamicCom setTab={dataContent} readonly={true} firstData={dataContent[0]}/>
       </div>
     </div>
   );

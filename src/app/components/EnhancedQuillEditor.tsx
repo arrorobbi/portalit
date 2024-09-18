@@ -12,6 +12,7 @@ export interface EnhancedQuillEditorProps {
   title?: string;
   onChange?: (content: string) => void;
   setTab?: string[];
+  id?: string
   // Add additional props if needed
 }
 
@@ -19,6 +20,7 @@ export default function EnhancedQuillEditor({
   value = "",
   readonly = false,
   title = "",
+  id
 }: EnhancedQuillEditorProps) {
   // State to hold the editor content
   const [editorContent, setEditorContent] = useState<string>(value);
@@ -29,20 +31,24 @@ export default function EnhancedQuillEditor({
     setTitle(event.target.value); // Update the state with the input value
   };
 
-  const postHandler = async () => {
-    const payload = { title: contentTitle, content: editorContent };
-    const response = await API(
-      "POST",
-      `${process.env.BE_HOST}/content`,
-      payload
-    );
-    if (response.status === 200) {
-      // Success!
-      // Redirect to the newly created content page
-      window.location.href = `/sharingKnowledge/create`;
+  const postHandler = async (id:string | undefined) => {
+    if(id === undefined){
+      const payload = { title: contentTitle, content: editorContent };
+      const response = await API(
+        "POST",
+        `${process.env.BE_HOST}/content`,
+        payload
+      );
+      if (response.status === 200) {
+        // Success!
+        // Redirect to the newly created content page
+        window.location.href = `/sharingKnowledge/create`;
+      } else {
+        // Handle error
+        console.error("Error creating content:", response.error);
+      }
     } else {
-      // Handle error
-      console.error("Error creating content:", response.error);
+      
     }
   };
   return (
@@ -77,7 +83,7 @@ export default function EnhancedQuillEditor({
           </div>
         )}
 
-        {!readonly && <Button onClick={postHandler}>Save</Button>}
+        {!readonly && <Button onClick={() => postHandler(id)}>Save</Button>}
       </div>
     </div>
   );

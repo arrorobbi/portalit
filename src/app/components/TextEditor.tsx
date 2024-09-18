@@ -38,16 +38,22 @@ interface ResponseData {
 const TextEditor: React.FC<LtabProps> = ({
   setTab,
   readonly = false, // Set default firstData to "SORE"
-  firstData = "Authenticator", // Added firstData to props
+  firstData, // Added firstData to props
   newTab,
 }) => {
   //const defaultTab = setTab && setTab.length > 0 ? setTab[0] : "SORE"; // Fallback to "SORE" if setTab is empty
   const [value, setValue] = useState<ResponseData | null>(null);
-  const [activeTab, setActiveTab] = useState<string>(
-    firstData // Use firstData as the initial active tab
-  );
+  const [activeTab, setActiveTab] = useState<string>("");
 
-  console.log(setTab); // get key from components for req content/:id
+  // console.log result is "Authenticator"
+  console.log(firstData); // get key from components for req content/:id
+
+  useEffect(() => {
+    // Check if newTab exists, and if it does, update activeTab
+    if (firstData) {
+      setActiveTab(firstData);
+    }
+  }, [firstData]); // Re-run this effect when newTab changes
 
   const localDate = value?.createdAt ? new Date(value.createdAt) : null;
   const formattedLocalDate = localDate
@@ -80,7 +86,9 @@ const TextEditor: React.FC<LtabProps> = ({
     }
   };
 
-  setTab?.map((value) => console.log(value));
+
+  console.log(value);
+  
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab} className="flex">
       <ScrollArea className="sticky top-0 h-72 w-48 rounded-md border overflow-y-auto">
@@ -109,14 +117,14 @@ const TextEditor: React.FC<LtabProps> = ({
                 <CardTitle>{value?.title || "Create New Content"}</CardTitle>
                 <CardDescription>
                   {value
-                    ? `Content created at: ${
+                    ? `created at: ${
                         value.createdAt ? formattedLocalDate : "Unknown date"
                       }`
                     : "Loading content..."}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-2">
-                <DynamicCom value={value?.content || ""} readonly={readonly} />
+                <DynamicCom value={value?.content || ""} readonly={readonly} id={value?.id}/>
               </CardContent>
               <CardFooter></CardFooter>
             </Card>

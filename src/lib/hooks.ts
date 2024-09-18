@@ -12,8 +12,6 @@ export default async function API(
     };
 
     // Only include body if method is POST or PUT
-    console.log(payload);
-
     if (method === "POST" || method === "PUT") {
       options.body = JSON.stringify(payload);
     }
