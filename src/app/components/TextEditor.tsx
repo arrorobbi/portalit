@@ -21,6 +21,7 @@ export interface LtabProps {
   readonly?: boolean;
   firstData?: string;
   newTab?: number;
+  title?: string
 }
 const DynamicCom = dynamic(() => import("./EnhancedQuillEditor"), {
   ssr: false,
@@ -76,18 +77,16 @@ const TextEditor: React.FC<LtabProps> = ({
 
   const loadContent = async (title: string) => {
     try {
-      const response: ResponseData = await API(
+      const response = await API(
         "GET",
         `${process.env.BE_HOST}/content/${title}`
-      );
-      setValue(response);
+      );      
+      setValue(response.data);
     } catch (error) {
       console.error("Error loading content:", error);
     }
   };
 
-
-  console.log(value);
   
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab} className="flex">
@@ -124,7 +123,7 @@ const TextEditor: React.FC<LtabProps> = ({
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-2">
-                <DynamicCom value={value?.content || ""} readonly={readonly} id={value?.id}/>
+                <DynamicCom value={value?.content || ""} readonly={readonly} id={value?.id} title={value?.title}/>
               </CardContent>
               <CardFooter></CardFooter>
             </Card>

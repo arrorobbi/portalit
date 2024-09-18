@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import QuillEditor from "./QuillEditor"; // Adjust the import path as necessary
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -19,38 +19,56 @@ export interface EnhancedQuillEditorProps {
 export default function EnhancedQuillEditor({
   value = "",
   readonly = false,
-  title = "",
+  title,
   id
 }: EnhancedQuillEditorProps) {
   // State to hold the editor content
   const [editorContent, setEditorContent] = useState<string>(value);
-  const [contentTitle, setTitle] = useState<string>(title);
+  const [contentTitle, setTitle] = useState<string>("");
 
   // Handle the input change
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value); // Update the state with the input value
   };
 
+  useEffect(() => {
+    if (title) {
+      setTitle(title); // Load content based on the active tab
+    }
+  }, [title]);
+
+  const post = async() =>{
+    const payload = { title: contentTitle, content: editorContent };
+    const response = await API(
+      "POST",
+      `${process.env.BE_HOST}/content`,
+      payload
+    );
+    if (response.status === 200) {
+      // Success!
+      // Redirect to the newly created content page
+      window.location.href = `/sharingKnowledge/create`;
+    } else {
+      // Handle error
+      console.error("Error creating content:", response.error);
+    }
+  }
+
   const postHandler = async (id:string | undefined) => {
     if(id === undefined){
-      const payload = { title: contentTitle, content: editorContent };
-      const response = await API(
-        "POST",
-        `${process.env.BE_HOST}/content`,
-        payload
-      );
-      if (response.status === 200) {
-        // Success!
-        // Redirect to the newly created content page
-        window.location.href = `/sharingKnowledge/create`;
-      } else {
-        // Handle error
-        console.error("Error creating content:", response.error);
-      }
+     await post()
     } else {
-      
+      const response = await API(
+        "DELETE",
+        `${process.env.BE_HOST}/content/delid/${id}`,
+      );
+      // console.log(response); //undefined result
+      response === undefined ? await post() : console.log("Data Not Found");
     }
   };
+
+  console.log(contentTitle);
+  
   return (
     <div>
       <div className="grid w-full gap-2">
@@ -58,7 +76,6 @@ export default function EnhancedQuillEditor({
           <>
             <Label className="pl-4 font-bold italic text-xl">Title</Label>
             <Input
-              placeholder="Input Title"
               onChange={handleTitleChange}
               type="text"
               value={contentTitle}
