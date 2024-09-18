@@ -3,9 +3,9 @@
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import API from "@/lib/hooks";
-import Topbar from "../components/TopBar";
+import Topbar from "@/app/components/TopBar";
 
-const DynamicCom = dynamic(() => import("../components/TextEditor"), {
+const DynamicCom = dynamic(() => import("../../components/TextEditor"), {
   ssr: false,
 });
 

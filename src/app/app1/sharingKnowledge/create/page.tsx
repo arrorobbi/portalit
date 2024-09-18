@@ -1,11 +1,11 @@
 "use client";
 import dynamic from "next/dynamic";
-import Topbar from "../../components/TopBar";
 import { useEffect, useState } from "react";
 import API from "@/lib/hooks";
+import Topbar from "@/app/components/TopBar";
 
 // Dynamically import the TextEditor component without SSR
-const DynamicCom = dynamic(() => import("../../components/TextEditor"), {
+const DynamicCom = dynamic(() => import("../../../components/TextEditor"), {
   ssr: false,
 });
 
