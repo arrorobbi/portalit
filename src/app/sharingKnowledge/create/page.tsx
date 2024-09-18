@@ -1,10 +1,10 @@
 "use client";
-
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import API from "@/lib/hooks";
 import Topbar from "@/app/components/TopBar";
 
+// Dynamically import the TextEditor component without SSR
 const DynamicCom = dynamic(() => import("../../components/TextEditor"), {
   ssr: false,
 });
@@ -17,31 +17,37 @@ interface ContentItem {
   updatedAt: string;
 }
 
-export default function SharingKnowledgePage() {
+export default function CreateSharingKnowledgePage() {
   const [dataContent, setDatacontent] = useState<string[]>([]);
+  const [tabCounter, setTabCounter] = useState<number>(0); // Add a counter to generate new tab titles
 
   useEffect(() => {
-    //data is push in props texteditor
     const fetchData = async () => {
       try {
         const response = await API("GET", `${process.env.BE_HOST}/content`);
         const data = response.data.payload;
         const titles: string[] = data.map((item: ContentItem) => item.title);
-        setDatacontent(titles); // Update the state with the resolved data
+        setDatacontent(titles); // Set the initial tabs
       } catch (error) {
         console.error("Error fetching content:", error);
-        setDatacontent([]);
       }
     };
 
-    fetchData(); // Call the async function directly
+    fetchData();
   }, []);
+
+  // Function to handle adding a new tab
+  const handleAddNewTab = () => {
+    const newTabTitle = `New Tab ${tabCounter + 1}`;
+    setDatacontent((prevTabs) => [...prevTabs, newTabTitle]);
+    setTabCounter((prevCounter) => prevCounter + 1);
+  };
 
   return (
     <div className="p-10">
-      <Topbar />
+      <Topbar onAddNew={handleAddNewTab} /> {/* Pass the handler to Topbar */}
       <div className="pt-28">
-        <DynamicCom setTab={dataContent} readonly={true} firstData={dataContent[0]}/>
+        <DynamicCom setTab={dataContent} newTab={tabCounter} firstData={dataContent[0]}/>
       </div>
     </div>
   );
