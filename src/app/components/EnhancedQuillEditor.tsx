@@ -88,7 +88,7 @@ export default function EnhancedQuillEditor({
 
   return (
     <div>
-      <div className="grid w-full h-80 gap-2">
+      <div className="grid w-full h-full gap-2">
         {!readonly ? (
           <>
             <Label className="pl-4 font-bold italic text-xl">Title</Label>
