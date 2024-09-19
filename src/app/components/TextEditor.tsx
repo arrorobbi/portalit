@@ -90,7 +90,7 @@ const TextEditor: React.FC<LtabProps> = ({
   
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab} className="flex">
-  <ScrollArea className="sticky top-0 h-72 w-48 rounded-md border overflow-y-auto">
+  <ScrollArea className="mt-4 h-72 w-48 rounded-md border overflow-y-auto">
     <TabsList className="flex flex-col items-center justify-center h-full p-6 space-y-4 bg-gray-100 rounded-lg pl-10">
       {setTab?.map((tabValue: string, index: number) => (
         <TabsTrigger

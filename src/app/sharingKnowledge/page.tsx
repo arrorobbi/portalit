@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import API from "@/lib/hooks";
-import Topbar from "@/app/components/TopBar";
+//import Topbar from "@/app/components/TopBar";
 
 const DynamicCom = dynamic(() => import("../components/TextEditor"), {
   ssr: false,
@@ -38,9 +38,8 @@ export default function SharingKnowledgePage() {
   }, []);
 
   return (
-    <div className="p-10">
-      <Topbar />
-      <div className="pt-28">
+    <div className="p-0 m-0">
+      <div className="pt-0 ml-20 mt-4">
         <DynamicCom setTab={dataContent} readonly={true} firstData={dataContent[0]}/>
       </div>
     </div>

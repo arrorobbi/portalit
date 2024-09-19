@@ -71,7 +71,7 @@ export default function EnhancedQuillEditor({
   
   return (
     <div>
-      <div className="grid w-full gap-2">
+      <div className="grid w-full h-80 gap-2">
         {!readonly ? (
           <>
             <Label className="pl-4 font-bold italic text-xl">Title</Label>
@@ -89,8 +89,8 @@ export default function EnhancedQuillEditor({
             readonly={readonly}
           />
         ) : (
-          <div className="min-h-screen h-full max-h-screen overflow-auto">
-            <ScrollArea className="h-full overflow-auto">
+          <div className="min-h-screen h-auto max-h-screen overflow-auto">
+            <ScrollArea className="h-80 overflow-auto">
               <QuillEditor
                 value={value}
                 onChange={setEditorContent}
