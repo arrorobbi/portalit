@@ -87,6 +87,31 @@ export default function EnhancedQuillEditor({
       }
     };
   }, []);
+
+  useEffect(() => {
+    const handleWheel = (event: WheelEvent) => {
+      if (event.ctrlKey) {
+        event.preventDefault();
+        setScale((prevScale) => Math.max(0.5, Math.min(prevScale - event.deltaY * 0.001, 2))); // Zoom range between 0.5x to 2x
+      }
+    };
+    const scrollArea = scrollAreaRef.current;
+    if (scrollArea) {
+      scrollArea.addEventListener("wheel", handleWheel);
+    }
+    return () => {
+      if (scrollArea) {
+        scrollArea.removeEventListener("wheel", handleWheel);
+      }
+    };
+  }, []);
+
+  const handleZoomIn = () => {
+    setScale((prevScale) => Math.min(prevScale + 0.1, 2)); // Max zoom in to 2x
+  };
+  const handleZoomOut = () => {
+    setScale((prevScale) => Math.max(prevScale - 0.1, 0.5)); // Min zoom out to 0.5x
+  };
   return (
     <div>
       <div className="grid w-full h-full gap-2">
@@ -108,41 +133,35 @@ export default function EnhancedQuillEditor({
           />
         ) : (
           <>
-            <div className="mt-12 mr-40 absolute top-2 right-2 flex flex-row space-x-2">
-              <button
-                className="p-1.5 rounded-full bg-gray-100 hover:bg-gray-200 shadow-lg hover:shadow-xl transition-all duration-200 ease-in-out transform hover:scale-105"
-                onClick={() =>
-                  setScale((prevScale) => Math.max(prevScale - 0.1, 0.5))
-                }
-                aria-label="Zoom Out"
-              >
-                <FaMinus className="text-sm" />
-              </button>
-              <button
-                className="p-1.5 rounded-full bg-gray-100 hover:bg-gray-200 shadow-lg hover:shadow-xl transition-all duration-200 ease-in-out transform hover:scale-105"
-                onClick={() =>
-                  setScale((prevScale) => Math.min(prevScale + 0.1, 2))
-                }
-                aria-label="Zoom In"
-              >
-                <FaPlus className="text-sm" />
-              </button>
-            </div>
+          <div className="mt-12 mr-40 absolute top-2 right-2 flex flex-row space-x-2">
+  <button
+    className="p-1.5 rounded-full bg-gray-100 hover:bg-gray-200 shadow-lg hover:shadow-xl transition-all duration-200 ease-in-out transform hover:scale-105"
+    onClick={handleZoomOut}
+    aria-label="Zoom Out"
+  >
+    <FaMinus className="text-sm" />
+  </button>
+  <button
+    className="p-1.5 rounded-full bg-gray-100 hover:bg-gray-200 shadow-lg hover:shadow-xl transition-all duration-200 ease-in-out transform hover:scale-105"
+    onClick={handleZoomIn}
+    aria-label="Zoom In"
+  >
+    <FaPlus className="text-sm" />
+  </button>
+</div>
+            {/* <div className="min-h-screen h-auto max-h-screen overflow-auto relative">             */}
             <ScrollArea className="h-80 overflow-auto" ref={scrollAreaRef}>
               <div
                 style={{
                   transform: `scale(${scale})`,
-                  transformOrigin: "0 0",
-                  transition: "transform 0.1s ease-out",
+                  transformOrigin: "0 0", // Ensures zooming starts from the top-left corner
+                  transition: "transform 0.1s ease-out", // Smooth zoom transition
                 }}
               >
-                <QuillEditor
-                  value={value}
-                  onChange={setEditorContent}
-                  readonly={readonly}
-                />
+                <QuillEditor value={value} onChange={setEditorContent} readonly={readonly} />
               </div>
             </ScrollArea>
+          {/* </div> */}
           </>
         )}
 
