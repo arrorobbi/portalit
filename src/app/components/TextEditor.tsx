@@ -133,8 +133,8 @@ const TextEditor: React.FC<LtabProps> = ({
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-2">
-              <p className="font-sans text-sm opacity-75">Click Zoom ( - / + ) or Ctrl + Scroll on Mouse For Zooming</p>
-              <p className="font-sans text-sm opacity-75">Click on Image to OPEN The Image</p>
+              <p className="font-sans text-xs opacity-75">Click Zoom ( - / + ) or Ctrl + Scroll on Mouse For Zooming</p>
+              <p className="font-sans text-xs opacity-75">Click on Image to OPEN The Image</p>
                 <DynamicCom
                   value={value?.content || ""}
                   readonly={readonly}
