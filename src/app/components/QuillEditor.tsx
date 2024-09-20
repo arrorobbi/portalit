@@ -70,9 +70,18 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
                       `img[src="${imageUrl}"]`
                     ) as HTMLImageElement;
                     if (insertedImage) {
-                      // Apply inline styles directly to the image
-                      insertedImage.style.maxWidth = "30%"; // Ensure image is responsive
-                      insertedImage.style.height = "30%";
+                      // Check if the image is portrait by comparing width and height
+                      if (insertedImage.naturalHeight > insertedImage.naturalWidth) {
+                        // Apply portrait-specific styles
+                        insertedImage.style.maxWidth = "30%"; // Smaller width for portrait
+                        insertedImage.style.height = "auto"; // Maintain aspect ratio
+                      } else {
+                        // Apply landscape-specific styles (if needed)
+                        insertedImage.style.maxWidth = "30%"; // Full width for landscape
+                        insertedImage.style.height = "auto"; // Maintain aspect ratio
+                      }
+                    
+                      // Common styles
                       insertedImage.style.cursor = "pointer";
                       insertedImage.style.resize = "both"; // Enable resizing
                       insertedImage.style.overflow = "hidden"; // Prevent overflow
