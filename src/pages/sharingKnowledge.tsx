@@ -3,9 +3,6 @@
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import API from "@/lib/hooks";
-import io from "socket.io-client";
-
-const socket = io("http://localhost:4021"); // Replace with your backend URL
 
 const DynamicCom = dynamic(() => import("../app/components/TextEditor"), {
   ssr: false,
@@ -39,24 +36,6 @@ export default function SharingKnowledgePage() {
     fetchData(); // Call the async function directly
   }, []);
 
-  useEffect(() => {
-    socket.on("connect", () => {
-      console.log("WebSocket connected:", socket.id);
-    });
-
-    socket.on("newData", (newData) => {
-      console.log("New data received:", newData);
-
-      // Check if newData is valid and has a title
-      if (newData && newData.title) {
-        setDatacontent((prevData) => [newData.title, ...prevData]); // Prepend new title to existing titles
-      }
-    });
-
-    return () => {
-      socket.off("newData"); // Clean up when the component unmounts
-    };
-  }, []);
 
   return (
     <div className="p-0 m-0">
