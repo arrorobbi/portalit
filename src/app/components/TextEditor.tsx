@@ -1,4 +1,5 @@
 "use client";
+
 import {
   Card,
   CardContent,
@@ -43,9 +44,9 @@ const TextEditor: React.FC<LtabProps> = ({
 }) => {
   const [value, setValue] = useState<ResponseData | null>(null);
   const [activeTab, setActiveTab] = useState<string>("");
-  const [searchTerm, setSearchTerm] = useState<string>(""); // State untuk pencarian
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
-  console.log(firstData);
+  console.log(setTab);
 
   useEffect(() => {
     if (firstData) {
@@ -83,14 +84,15 @@ const TextEditor: React.FC<LtabProps> = ({
     }
   };
 
-  // Filter tab berdasarkan nilai pencarian
-  const filteredTabs = setTab?.filter((tabValue) =>
-    tabValue.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredTabs = (setTab || []).filter((tabValue) => {
+    if (typeof tabValue === "string") {
+      return tabValue.toLowerCase().includes(searchTerm.toLowerCase());
+    }
+    return false; // Exclude non-string values
+  });
 
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab} className="flex">
-      {/* Input pencarian */}
       <div className="w-48">
         <input
           type="text"
@@ -101,9 +103,9 @@ const TextEditor: React.FC<LtabProps> = ({
         />
         <ScrollArea className="mt-4 h-72 w-48 rounded-md border overflow-y-auto">
           <TabsList className="flex flex-col items-center justify-center h-full p-6 space-y-4 bg-gray-100 rounded-lg pl-10">
-            {filteredTabs?.map((tabValue: string, index: number) => (
+            {filteredTabs.map((tabValue, index) => (
               <TabsTrigger
-                key={index}
+                key={`${tabValue}-${index}`} // Ensure unique key by appending index
                 value={tabValue}
                 className={`w-full p-2 text-center rounded-lg transition-colors duration-300 break-words whitespace-normal ${
                   activeTab === tabValue
@@ -133,8 +135,12 @@ const TextEditor: React.FC<LtabProps> = ({
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-2">
-              <p className="font-sans text-xs opacity-75">Click Zoom ( - / + ) or Ctrl + Scroll on Mouse For Zooming</p>
-              <p className="font-sans text-xs opacity-75">Click on Image to OPEN The Image</p>
+                <p className="font-sans text-xs opacity-75">
+                  Click Zoom ( - / + ) or Ctrl + Scroll on Mouse For Zooming
+                </p>
+                <p className="font-sans text-xs opacity-75">
+                  Click on Image to OPEN The Image
+                </p>
                 <DynamicCom
                   value={value?.content || ""}
                   readonly={readonly}
