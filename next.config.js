@@ -6,6 +6,6 @@ module.exports = {
     domains: ["10.100.101.124"], // Add the IP address or domain name here
   },
   env: {
-    BE_HOST: process.env.BE_HOST,
+    NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL,
   },
 };

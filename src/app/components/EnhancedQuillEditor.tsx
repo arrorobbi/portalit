@@ -53,7 +53,7 @@ export default function EnhancedQuillEditor({
     const payload = { title: contentTitle, content: editorContent };
     const response = await API(
       "POST",
-      `${process.env.BE_HOST}/content`,
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/content`,
       payload
     );
     if (response.status === 200) {
@@ -69,7 +69,7 @@ export default function EnhancedQuillEditor({
     } else {
       const response = await API(
         "DELETE",
-        `${process.env.BE_HOST}/content/delid/${id}`
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/content/delid/${id}`
       );
       response === undefined ? await post() : console.log("Data Not Found");
     }

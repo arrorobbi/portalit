@@ -3,9 +3,11 @@ import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import API from "@/lib/hooks";
 import Topbar from "@/app/components/TopBar";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
 // Dynamically import the TextEditor component without SSR
-const DynamicCom = dynamic(() => import("../../components/TextEditor"), {
+const DynamicCom = dynamic(() => import("../../app/components/TextEditor"), {
   ssr: false,
 });
 
@@ -20,11 +22,21 @@ interface ContentItem {
 export default function CreateSharingKnowledgePage() {
   const [dataContent, setDatacontent] = useState<string[]>([]);
   const [tabCounter, setTabCounter] = useState<number>(0); // Add a counter to generate new tab titles
+  const { data: session, status } = useSession();
+  const router = useRouter();
 
+  useEffect(() => {   
+    if (status === "loading") return;
+
+    if (!session) {
+      router.push("/login");
+    }
+  }, [session, status, router]);
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await API("GET", `${process.env.BE_HOST}/content`);
+        const response = await API("GET", `${process.env.NEXT_PUBLIC_API_BASE_URL}/content`);
         const data = response.data.payload;
         const titles: string[] = data.map((item: ContentItem) => item.title);
         setDatacontent(titles); // Set the initial tabs

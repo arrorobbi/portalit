@@ -75,7 +75,7 @@ const TextEditor: React.FC<LtabProps> = ({
     try {
       const response = await API(
         "GET",
-        `${process.env.BE_HOST}/content/${title}`
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/content/${title}`
       );
       setValue(response.data);
     } catch (error) {

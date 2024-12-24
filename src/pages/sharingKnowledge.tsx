@@ -5,9 +5,10 @@ import { useEffect, useState } from "react";
 import API from "@/lib/hooks";
 //import Topbar from "@/app/components/TopBar";
 
-const DynamicCom = dynamic(() => import("../components/TextEditor"), {
+const DynamicCom = dynamic(() => import("../app/components/TextEditor"), {
   ssr: false,
 });
+
 
 interface ContentItem {
   id: string;
@@ -24,7 +25,7 @@ export default function SharingKnowledgePage() {
     //data is push in props texteditor
     const fetchData = async () => {
       try {
-        const response = await API("GET", `${process.env.BE_HOST}/content`);
+        const response = await API("GET", `${process.env.NEXT_PUBLIC_API_BASE_URL}/content`);
         const data = response.data.payload;
         const titles: string[] = data.map((item: ContentItem) => item.title);
         setDatacontent(titles); // Update the state with the resolved data

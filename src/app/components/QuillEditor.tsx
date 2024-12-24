@@ -53,7 +53,7 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
                     formData.append("image", file);
 
                     const res = await fetch(
-                      `${process.env.BE_HOST}/upload/image`,
+                      `${process.env.NEXT_PUBLIC_API_BASE_URL}/upload/image`,
                       {
                         method: "POST",
                         body: formData,
@@ -61,7 +61,7 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
                     );
 
                     const data = await res.json();
-                    const imageUrl = `${process.env.BE_HOST}${data.path}`;
+                    const imageUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}${data.path}`;
                     const range = quill.getSelection();
                     const position = range ? range.index : quill.getLength();
                     quill.insertEmbed(position, "image", imageUrl);
