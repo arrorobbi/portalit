@@ -55,33 +55,26 @@ const LoginPage = () => {
       setAlertMessage("Login successful!");
       setAlertType("success");
       setShowAlert(true);
-      // setTimeout(() => {
-      //   router.push(redirect ? decodeURIComponent(redirect as string) : "/dashboard");
-      // }, 1000);
+      setTimeout(() => {
+        router.push(redirect ? decodeURIComponent(redirect as string) : "/dashboard");
+      }, 1000);
     }
   };
 
   return (
     <>
       <NextSeo
-        title="Arezoo Animal Service | Login"
-        description="Welcome to Arezoo Animal Service. Sign in to access your dashboard."
+        title="PORTAL TECH SUPPORT | Login"
+        description="Welcome to IT TECH PORTAL. Sign in to access your dashboard."
         openGraph={{
-          title: "Dashboard",
-          description: "Restricted",
-          url: "https://arezooanimalservice.com/login",
+          title: "PORTAL TECH SUPPORT | Login",
+          description: "Welcome to IT TECH PORTAL. Sign in to access your dashboard.",
+          url: "http://10.100.101.200:3030/login",
         }}
       />
       <div className="flex justify-center items-center h-screen bg-gradient-to-b from-blue-200 to-blue-500">
         {/* Container */}
         <div className="bg-white p-6 sm:p-8 rounded-lg shadow-lg w-full max-w-md relative">
-          {/* Logo or Icon */}
-          <div className="flex justify-center mb-6">
-            <div className="flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full">
-              <span className="text-3xl text-[#00ADEF] font-semibold">🐾</span>
-            </div>
-          </div>
-
           {/* Header Section */}
           <div className="text-center mb-4">
             <h2 className="text-2xl font-bold text-gray-700 mb-2">Selamat Datang!</h2>
