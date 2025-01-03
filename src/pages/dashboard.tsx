@@ -167,11 +167,14 @@ export const getServerSideProps = async () => {
 
         // Return the device data after async fetch completes
         const pingValue = details[0]?.channels[0]?.last_measurement?.display_value || "no data";
+        const status = details[0].status;
         const sflowValue = details[1]?.channels[0]?.last_measurement?.display_value || "no data";
+        const packetLoss = details[0]?.channels[6]?.last_measurement?.display_value || 0;
         // Ensure the value is a number before formatting
         const sflow = typeof sflowValue === "number" ? Number(sflowValue.toFixed(2)) : sflowValue;
+        const ping = typeof pingValue === "number" ? Number(pingValue.toFixed(2)) : pingValue;
 
-        // console.log("Ping display_volume:", typeof sflow); // null
+        // console.log("Ping display_volume:", packetLoss); // null
         // console.log("sFlow display_volume:", sflowDisplayVolume); // 3.78125
         return {
           id: device.id,
@@ -183,15 +186,15 @@ export const getServerSideProps = async () => {
               title: "sFlow",
               value: sflow,
               unit: "Mbit/s",
-              status: "get data",
+              status: `Status: ${status}`,
               color: "#F59E0B",
               icon: "Activity", // Store as string
             },
             {
               title: "Ping",
-              value: pingValue,
+              value: ping,
               unit: "msec",
-              status: "get data",
+              status: `Packet Loss: ${packetLoss}%`,
               color: "#84CC16",
               icon: "CheckCircle", // Store as string
             },
