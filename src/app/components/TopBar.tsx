@@ -17,7 +17,7 @@ export default function Topbar({ onAddNew }: TopbarProps) {
           {/* Logo */}
           <div className="colums-md">
             <Link
-              href="http://10.100.101.124:3000/clipan/public/#header"
+              href="http://10.100.101.124:3030/dashboard"
               passHref
             >
               <Image
@@ -50,6 +50,12 @@ export default function Topbar({ onAddNew }: TopbarProps) {
               className="text-gray-600 hover:text-blue-600"
             >
               Contact
+            </a>
+            <a
+              href="http://10.100.101.124:3030/sharingKnowledge/create"
+              className="text-gray-600 hover:text-blue-600"
+            >
+              Sharing Knowledge
             </a>
           </nav>
 

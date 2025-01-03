@@ -20,17 +20,17 @@ type SensorData = {
   type DashboardProps = {
     deviceName: string;
     ipAddress: string;
-    dependency: string;
+    group: string;
     sensors: SensorData[];
   };
   
-  const Dashboard: React.FC<DashboardProps> = ({ deviceName, ipAddress, dependency, sensors }) => {
+  const Dashboard: React.FC<DashboardProps> = ({ deviceName, ipAddress, group, sensors }) => {
     return (
         <div className="p-6 w-full bg-gray-100">
             <div className="mb-2">
             <h1 className="text-2xl font-bold text-gray-800">{deviceName}</h1>
             <div className="text-sm text-gray-600">
-                Type: Device | DNS Name/IP Address: {ipAddress} | Dependency: {dependency}
+                Type: Device | DNS Name/IP Address: {ipAddress} | Region: {group}
             </div>
             </div>
     

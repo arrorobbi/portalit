@@ -64,7 +64,7 @@ export default NextAuth({
   },
   session: {
     strategy: "jwt",
-    maxAge: 8 * 60 * 60, // Token lifespan in 8 hours
+    maxAge: 1 * 60 * 60, // Token lifespan in 1 hours
   },
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {

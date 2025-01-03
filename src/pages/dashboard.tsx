@@ -2,8 +2,10 @@ import { useSession } from "next-auth/react";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import Topbar from "@/app/components/TopBar";
+import * as fs from 'fs';
 import Dashboard from "@/app/components/dashboard";
 import { Activity, CheckCircle } from "lucide-react"; // Replace with your icons if necessary
+import { json } from "stream/consumers";
 
 // Define types for the device and sensor objects
 type Sensor = {
@@ -19,7 +21,7 @@ type Device = {
   id: string;
   deviceName: string;
   ipAddress: string;
-  dependency: string;
+  group: string;
   sensors: Sensor[];
 };
 
@@ -54,7 +56,7 @@ const DataPage = ({ devices, token }: DataPageProps) => {
   return (
     <div className="min-h-screen p-4">
       <Topbar />
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-4 p-4 mt-10">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-4 p-4 mt-20">
         {devices.map((device, index) => (
           <Dashboard
             key={index}
@@ -145,7 +147,7 @@ export const getServerSideProps = async () => {
       );
 
       const deviceData = await getDevice.json();
-      console.log("DATAA: ", deviceData[0].basic["host"]);
+      // console.log("DATAA: ", deviceData[0].basic["host"]);
 
       // Use Promise.all to wait for all async operations to complete
       const devicePromises = deviceData.map(async (device: AllDevice) => {
@@ -162,29 +164,32 @@ export const getServerSideProps = async () => {
         );
 
         const details = await getDetails.json();
-        const pingDisplayVolume = details.find((sensor: any) => sensor.name === "Ping")?.channels[0]?.last_measurement?.display_volume;
-        const sflowDisplayVolume = details.find((sensor: any) => sensor.name === "sFlow")?.channels[0]?.last_measurement?.display_volume;
 
         // Return the device data after async fetch completes
-        console.log("Ping display_volume:", pingDisplayVolume); // null
-        console.log("sFlow display_volume:", sflowDisplayVolume); // 3.78125
+        const pingValue = details[0]?.channels[0]?.last_measurement?.display_value || "no data";
+        const sflowValue = details[1]?.channels[0]?.last_measurement?.display_value || "no data";
+        // Ensure the value is a number before formatting
+        const sflow = typeof sflowValue === "number" ? Number(sflowValue.toFixed(2)) : sflowValue;
+
+        // console.log("Ping display_volume:", typeof sflow); // null
+        // console.log("sFlow display_volume:", sflowDisplayVolume); // 3.78125
         return {
           id: device.id,
           deviceName: device.name,
           ipAddress: device.basic["host"] || "invalid",
-          dependency: device.parent["name"] || "invalid",
+          group: device.parent["name"] || "invalid",
           sensors: [
             {
               title: "sFlow",
-              value: sflowDisplayVolume || "no data",
+              value: sflow,
               unit: "Mbit/s",
               status: "get data",
               color: "#F59E0B",
               icon: "Activity", // Store as string
             },
             {
-              title: details[0]["name"],
-              value: pingDisplayVolume || "no data",
+              title: "Ping",
+              value: pingValue,
               unit: "msec",
               status: "get data",
               color: "#84CC16",
